@@ -63,7 +63,7 @@
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>3</number>
+       <number>5</number>
       </property>
       <widget class="QWidget" name="page_1">
        <layout class="QVBoxLayout" name="verticalLayout">
@@ -1929,7 +1929,7 @@
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap>../../ダウンロード/resultill.png</pixmap>
+             <pixmap>../pic/resultill.png</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>

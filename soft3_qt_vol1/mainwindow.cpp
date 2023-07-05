@@ -16,9 +16,6 @@ extern int g_point;
 #define RESULT_PATH "/home/user/Qt/testresult.png"
 #define ERRORcheck "error01"
 
-///*** opencvの差分検出方法の選択のためのグローバル変数 ***/
-//int g_point;
-
 /*** カメラ入力のカウントを行うための変数 ***/
 int g_count = 0;
 
@@ -472,8 +469,9 @@ void MainWindow::on_select_cheat_released()
 {
     auto current_page = ui->stackedWidget->currentIndex();
     ui->stackedWidget->setCurrentIndex(++current_page); //発表準備中の画面に飛んでから処理できるようにしたい
+
     //QTimer::singleShot(2000,this);
-    //QThread::sleep(2); 遷移する前の画面で止まっちゃう
+//    QThread::sleep(2); //遷移する前の画面で止まっちゃう
 
     //error = ERRORcheck; //エラー判断用のグローバル変数を作成し、エラーの場合はそこに何かしらの文字列を入れてもらうようにしたい（今回は"error01"）
 //    QString Qerror = QString::fromStdString(error); //受け取った文字列を変換

@@ -27,7 +27,7 @@ signals:
     void errorPage();
     void value_change(int value);
 private:
-    int feature_matching(const cv::Mat &src1, const cv::Mat &src2, cv::Mat &dst);
+    int feature_matching(const cv::Mat &src1, const cv::Mat &src2, cv::Mat &dst1, cv::Mat &dst2);
     void absdiff1(const cv::Mat &src, const cv::Mat &dst);
     void absdiff2(const cv::Mat &src, const cv::Mat &dst);
     bool Stop;
