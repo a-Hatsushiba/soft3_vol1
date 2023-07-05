@@ -63,7 +63,7 @@
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="page_1">
        <layout class="QVBoxLayout" name="verticalLayout">
@@ -303,7 +303,10 @@
            <widget class="QLabel" name="selectlabel_1">
             <property name="font">
              <font>
+              <family>Ubuntu Mono</family>
               <pointsize>30</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
              </font>
             </property>
             <property name="text">
@@ -318,7 +321,10 @@
            <widget class="QLabel" name="debuglabel_1">
             <property name="font">
              <font>
+              <family>Ubuntu Mono</family>
               <pointsize>20</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
              </font>
             </property>
             <property name="text">
@@ -367,6 +373,7 @@
               </property>
               <property name="font">
                <font>
+                <family>Ubuntu Mono</family>
                 <pointsize>15</pointsize>
                </font>
               </property>
@@ -675,7 +682,10 @@
            <widget class="QLabel" name="selectlabel_2">
             <property name="font">
              <font>
+              <family>Ubuntu Mono</family>
               <pointsize>30</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
              </font>
             </property>
             <property name="text">
@@ -827,7 +837,7 @@
        </layout>
       </widget>
       <widget class="QWidget" name="page_5">
-       <layout class="QVBoxLayout" name="verticalLayout_7">
+       <layout class="QVBoxLayout" name="verticalLayout_9">
         <item>
          <spacer name="verticalSpacer_10">
           <property name="orientation">
@@ -891,7 +901,7 @@
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_11">
+         <layout class="QHBoxLayout" name="horizontalLayout_21">
           <item>
            <spacer name="horizontalSpacer_20">
             <property name="orientation">
@@ -929,6 +939,48 @@
           </item>
           <item>
            <spacer name="horizontalSpacer_21">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_22">
+          <item>
+           <spacer name="horizontalSpacer_25">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QProgressBar" name="progressBar">
+            <property name="font">
+             <font>
+              <pointsize>15</pointsize>
+             </font>
+            </property>
+            <property name="value">
+             <number>24</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_26">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>

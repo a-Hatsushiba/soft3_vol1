@@ -31,9 +31,24 @@ void pointMatching::run(void)
   }
   cv::Mat image1 = cv::imread(g_img_path1);
   cv::Mat image2 = cv::imread(g_img_path2);
+
+  emit value_change(10);
+  sleep(1);
+  emit value_change(20);
+  sleep(1);
+  emit value_change(30);
+  sleep(1);
+  emit value_change(40);
+  sleep(1);
+  emit value_change(50);
+  sleep(1);
+  emit value_change(60);
   
   //特徴点マッチング
   int end_match = feature_matching(image1, image2, image1);
+
+  emit value_change(90);
+  sleep(1);
   
   if(end_match == 0){ //特徴点マッチングで類似度高い
       //差分検出＆補正をコマンドライン引数から選択->GUIのファイルorカメラでできるようにした
@@ -59,6 +74,9 @@ void pointMatching::run(void)
             std::cout << "result_path1:" << g_result_path1 << std::endl;
             std::cout << "result_path2:" << g_result_path2 << std::endl;
         }
+
+        emit value_change(100);
+        sleep(1);
 
         /*** 終わったらシグナルを発信して次の画面に行く ***/
         emit nextPage();
@@ -121,7 +139,8 @@ int pointMatching::feature_matching(const cv::Mat &src1, const cv::Mat &src2, cv
     sim += dis.distance;
   }
   sim /= match.size();
-  std::cout << "類似度: " << sim << std::endl;
+  if(DEBUG) std::cout << "類似度: " << sim << std::endl;
+
 
   /* 画像の類似度が低すぎる場合は終了 */
   if( sim > THRESHOLD){
@@ -202,7 +221,7 @@ void pointMatching::absdiff1(const cv::Mat &src, const cv::Mat &dst)
   cv::Mat overlaidImage;
   cv::addWeighted(redImage, 1.0, darkenedImage, 1.0, 0.0, overlaidImage);
   cv::resize(overlaidImage, overlaidImage, cv::Size(), 500.0/overlaidImage.cols ,500.0/overlaidImage.cols);
-  cv::imshow("Resuit", overlaidImage);
+  if(DEBUG) cv::imshow("Resuit", overlaidImage);
 //  cv::waitKey(0);
   cv::imwrite("Result.png", overlaidImage);
   if(DEBUG) std::cout << "暗くした画像と重ねた" << std::endl;

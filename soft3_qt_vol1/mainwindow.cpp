@@ -41,23 +41,38 @@ MainWindow::MainWindow(QWidget *parent)
 
     /*** 各ボタンに対して背景の色が透けないようにしている ***/
     /*** 初芝担当箇所ボタン ***/
-    ui->quitButton->setStyleSheet("background-color:gainsboro;");
-    ui->fileSelectButton->setStyleSheet("background-color:gainsboro;");
-    ui->cameraButton_1->setStyleSheet("background-color:gainsboro;");
-    ui->returnButton_1->setStyleSheet("background-color:gainsboro;");
-    ui->fileOpenButton_1->setStyleSheet("background-color:gainsboro;");
-    ui->fileOpenButton_2->setStyleSheet("background-color:gainsboro;");
-    ui->returnButton_2->setStyleSheet("background-color:gainsboro;");
-    ui->cameraTakeButton_1->setStyleSheet("background-color:gainsboro;");
+    ui->quitButton->setStyleSheet("*{padding:10px; border-radius:10px; background-color:whitesmoke; border:3px outset gainsboro;}"
+                                  ":pressed {background-color:gainsboro; color:black; border-style:inset;}");
+    ui->fileSelectButton->setStyleSheet("*{padding:10px; border-radius:10px; background-color:whitesmoke; border:3px outset gainsboro;}"
+                                        ":pressed {background-color:gainsboro; color:black; border-style:inset;}");
+    ui->cameraButton_1->setStyleSheet("*{padding:10px; border-radius:10px; background-color:whitesmoke; border:3px outset gainsboro;}"
+                                      ":pressed {background-color:gainsboro; color:black; border-style:inset;}");
+    ui->returnButton_1->setStyleSheet("*{padding:10px; border-radius:10px; background-color:whitesmoke; border:3px outset gainsboro;}"
+                                      ":pressed {background-color:gainsboro; color:black; border-style:inset;}");
+    ui->fileOpenButton_1->setStyleSheet("*{padding:10px; border-radius:10px; background-color:whitesmoke; border:3px outset gainsboro;}"
+                                        ":pressed {background-color:gainsboro; color:black; border-style:inset;}");
+    ui->fileOpenButton_2->setStyleSheet("*{padding:10px; border-radius:10px; background-color:whitesmoke; border:3px outset gainsboro;}"
+                                        ":pressed {background-color:gainsboro; color:black; border-style:inset;}");
+    ui->returnButton_2->setStyleSheet("*{padding:10px; border-radius:10px; background-color:whitesmoke; border:3px outset gainsboro;}"
+                                        ":pressed {background-color:gainsboro; color:black; border-style:inset;}");
+    ui->cameraTakeButton_1->setStyleSheet("*{padding:10px; border-radius:10px; background-color:whitesmoke; border:3px outset gainsboro;}"
+                                        ":pressed {background-color:gainsboro; color:black; border-style:inset;}");
     /*** 廣瀬担当箇所ボタン ***/
-    ui->startbutton->setStyleSheet("background-color:gainsboro;");
-    ui->giveupbutton->setStyleSheet("background-color:gainsboro;");
-    ui->clearbutton->setStyleSheet("background-color:gainsboro;");
+    ui->startbutton->setStyleSheet("*{padding:10px; border-radius:10px; background-color:whitesmoke; border:3px outset gainsboro;}"
+                                        ":pressed {background-color:gainsboro; color:black; border-style:inset;}");
+    ui->giveupbutton->setStyleSheet("*{padding:10px; border-radius:10px; background-color:whitesmoke; border:3px outset gainsboro;}"
+                                        ":pressed {background-color:gainsboro; color:black; border-style:inset;}");
+    ui->clearbutton->setStyleSheet("*{padding:10px; border-radius:10px; background-color:whitesmoke; border:3px outset gainsboro;}"
+                                        ":pressed {background-color:gainsboro; color:black; border-style:inset;}");
     /*** 浅川担当箇所ボタン ***/
-    ui->select_cheat->setStyleSheet("background-color:gainsboro;");
-    ui->select_jiriki->setStyleSheet("background-color:gainsboro;");
-    ui->start_return_Button->setStyleSheet("background-color:gainsboro;");
-    ui->startReturnButton_2->setStyleSheet("background-color:gainsboro;");
+    ui->select_cheat->setStyleSheet("*{padding:10px; border-radius:10px; background-color:whitesmoke; border:3px outset gainsboro;}"
+                                        ":pressed {background-color:gainsboro; color:black; border-style:inset;}");
+    ui->select_jiriki->setStyleSheet("*{padding:10px; border-radius:10px; background-color:whitesmoke; border:3px outset gainsboro;}"
+                                        ":pressed {background-color:gainsboro; color:black; border-style:inset;}");
+    ui->start_return_Button->setStyleSheet("*{padding:10px; border-radius:10px; background-color:whitesmoke; border:3px outset gainsboro;}"
+                                        ":pressed {background-color:gainsboro; color:black; border-style:inset;}");
+    ui->startReturnButton_2->setStyleSheet("*{padding:10px; border-radius:10px; background-color:whitesmoke; border:3px outset gainsboro;}"
+                                        ":pressed {background-color:gainsboro; color:black; border-style:inset;}");
 
     /*** BGM ***/
     /** 現在のファイルの絶対パスの取得 **/
@@ -95,7 +110,10 @@ MainWindow::MainWindow(QWidget *parent)
     //間違いの残りの個数
     ui->allnumlabel->setText("全部で"+QString::number(num)+"こあるよ!");
 
-    /*** 浅川担当箇所 ***/
+    /*** 進捗状況のバー ***/
+    ui->progressBar->setStyleSheet("background-color:white; border:2px solid grey; border-radius:5px; text-align:center;");
+    ui->progressBar->setRange(0, 100);
+    ui->progressBar->setValue(0);
 }
 
 /*** デストラクタ ***/
@@ -217,10 +235,12 @@ void MainWindow::on_fileOpenButton_2_released()
            pointMatch = new pointMatching(this);
            connect(pointMatch, SIGNAL(nextPage()), this, SLOT(moveNextPage()));
            connect(pointMatch, SIGNAL(errorPage()), this, SLOT(moveErrorPage()));
+           connect(pointMatch, SIGNAL(value_change(int)), this, SLOT(on_progressBar_valueChanged(int)));
            if(DEBUG){
                std::cout << "画像処理スタート" << std::endl;
            }
            pointMatch->start();
+
         }
     }
 
@@ -310,8 +330,8 @@ void MainWindow::on_cameraTakeButton_1_released()
             ui->stackedWidget->setCurrentIndex(current_page+2);
             /*** 別スレッドで画像処理スタート ***/
             pointMatch = new pointMatching(this);
-            connect(pointMatch, &pointMatching::nextPage, this, &MainWindow::moveNextPage);
-            connect(pointMatch, &pointMatching::nextPage, this, &MainWindow::moveErrorPage);
+            connect(pointMatch, SIGNAL(nextPage()), this, SLOT(moveNextPage()));
+            connect(pointMatch, SIGNAL(errorPage()), this, SLOT(moveErrorPage()));
             if(DEBUG){
                 std::cout << "画像処理スタート" << std::endl;
             }
@@ -487,4 +507,10 @@ void MainWindow::on_start_return_Button_released()
 void MainWindow::on_startReturnButton_2_released()
 {
     ui->stackedWidget->setCurrentIndex(0);//スタートへ戻る
+}
+
+/** 画像処理の進捗状況を教えてくれるバー **/
+void MainWindow::on_progressBar_valueChanged(int value)
+{
+    ui->progressBar->setValue(value);
 }

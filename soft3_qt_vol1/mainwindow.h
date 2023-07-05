@@ -5,6 +5,7 @@
 #include <QMainWindow>
 #include <QFileDialog>
 #include <QString>
+#include <unistd.h>
 /** USBカメラ用 **/
 #include <QMessageBox>
 #include <QThread>
@@ -57,6 +58,7 @@ private slots:
     void on_fileOpenButton_2_released();
     void moveNextPage();
     void moveErrorPage();
+    void on_progressBar_valueChanged(int value);
     /*** 廣瀬担当箇所 ***/
     void on_startbutton_released();
     void updateTime();
@@ -68,9 +70,10 @@ private slots:
     void on_select_cheat_released();
     void on_select_jiriki_released();
 
-    void on_start_return_Button_released();
 
+    void on_start_return_Button_released();
     void on_startReturnButton_2_released();
+
 
 private:
     Ui::MainWindow *ui;
