@@ -481,14 +481,31 @@ void MainWindow::on_select_cheat_released()
 //        ui->stackedWidget->setCurrentIndex(current_page++); //受け取った文字列が予め決めていた文字列と一致した場合、エラー画面に遷移
 //    }
 //    else{
-        //結果を表示する前に、2秒ほど会議中の画面を入れたほうがいいかなと思ったので考えてます
-        current_page = ui->stackedWidget->currentIndex();
-        ui->stackedWidget->setCurrentIndex(current_page + 2); //結果表示画面に遷移
+        //結果を表示する前に、2秒ほど会議中の画面を入れたほうがいいかなと思ったのでいれました！
+        QTimer::singleShot(3000,this, SLOT(screen_transition()));
 //        g_result_path3 = RESULT_PATH; //受け取ったパス(仮)を代入
 //        QString Qresult_path = QString::fromStdString(g_result_path1); //受け取ったパスを変換
 //        QPixmap pix(Qresult_path);
 //        ui->result->setPixmap(pix);
 //    }
+}
+
+void MainWindow::screen_transition()
+{
+    /** 音をつけたい **/
+    //time.stop();
+//    auto mp = new QMediaPlayer();
+//    mp->setMedia(QUrl::fromLocalFile("/home/user/Qt/ジャン！.mp3"));
+//    mp->setVolume(30);
+//    mp->play();
+
+    auto current_page = ui->stackedWidget->currentIndex();
+    ui->stackedWidget->setCurrentIndex(current_page + 2); //結果表示画面に遷移
+    /**　画像処理が終わった時点で同じ処理をしているのでコメントアウト　**/
+//    result_path1 = RESULT_PATH; //受け取ったパス(仮)を代入
+//    QString Qresult_path = QString::fromStdString(result_path1); //受け取ったパスを変換
+//    QPixmap pix(Qresult_path);
+//    ui->result->setPixmap(pix);
 }
 
 void MainWindow::on_select_jiriki_released()

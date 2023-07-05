@@ -69,6 +69,7 @@ private slots:
     /*** 浅川担当箇所 ***/
     void on_select_cheat_released();
     void on_select_jiriki_released();
+    void screen_transition();
 
 
     void on_start_return_Button_released();
