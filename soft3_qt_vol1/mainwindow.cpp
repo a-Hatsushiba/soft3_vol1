@@ -61,6 +61,9 @@ MainWindow::MainWindow(QWidget *parent)
                                         ":pressed {background-color:gainsboro; color:black; border-style:inset;}");
     ui->clearbutton->setStyleSheet("*{padding:10px; border-radius:10px; background-color:whitesmoke; border:3px outset gainsboro;}"
                                         ":pressed {background-color:gainsboro; color:black; border-style:inset;}");
+    ui->ConfirmButton->setStyleSheet("*{padding:10px; border-radius:10px; background-color:whitesmoke; border:3px outset gainsboro;}"
+                                         ":pressed {background-color:gainsboro; color:black; border-style:inset;}");
+
     /*** 浅川担当箇所ボタン ***/
     ui->select_cheat->setStyleSheet("*{padding:10px; border-radius:10px; background-color:whitesmoke; border:3px outset gainsboro;}"
                                         ":pressed {background-color:gainsboro; color:black; border-style:inset;}");
@@ -71,6 +74,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->startReturnButton_2->setStyleSheet("*{padding:10px; border-radius:10px; background-color:whitesmoke; border:3px outset gainsboro;}"
                                         ":pressed {background-color:gainsboro; color:black; border-style:inset;}");
 
+    /*** 初芝担当箇所 ***/
     /*** BGM ***/
     /** 現在のファイルの絶対パスの取得 **/
     auto abs_path = QApplication::applicationDirPath();
@@ -89,11 +93,16 @@ MainWindow::MainWindow(QWidget *parent)
     background_music->setPlaylist(playlist);
     background_music->play();
 
+    /*** 進捗状況のバー ***/
+    ui->progressBar->setStyleSheet("background-color:white; border:2px solid grey; border-radius:5px; text-align:center;");
+    ui->progressBar->setRange(0, 100);
+    ui->progressBar->setValue(0);
+
     /*** 廣瀬担当箇所 ***/
     timer = new QTimer;
     connect(timer,SIGNAL(timeout()),this,SLOT(updateTime()));
 //    QPixmap pix("../pic/software_logo_half3.png");//間違い撲滅委員会ロゴ
-    QPixmap comp("../pic/comp.PNG");//クリア画面
+    QPixmap comp("../pic/comp.jpg");//クリア画面
     //スタート画面にロゴを表示
 //    int w = ui->label->width();
 //    int h = ui->label->height();
@@ -104,13 +113,9 @@ MainWindow::MainWindow(QWidget *parent)
     int h3 = ui->clearlabel->height();
     ui->clearlabel->setPixmap(comp.scaled(w3,h3,Qt::KeepAspectRatio));
 
-    //間違いの残りの個数
-    ui->allnumlabel->setText("全部で"+QString::number(num)+"こあるよ!");
+    //スピンボックスの最小値最大値設定
+    ui->spinBox->setRange(1,100);
 
-    /*** 進捗状況のバー ***/
-    ui->progressBar->setStyleSheet("background-color:white; border:2px solid grey; border-radius:5px; text-align:center;");
-    ui->progressBar->setRange(0, 100);
-    ui->progressBar->setValue(0);
 }
 
 /*** デストラクタ ***/
@@ -342,8 +347,10 @@ void MainWindow::on_startbutton_released()
 {
     auto current_page = ui->stackedWidget->currentIndex();
     ui->stackedWidget->setCurrentIndex(++current_page);
-    time10 = 10000;
+    time10 = 2000 * num;
     timer->start(10);
+    //間違いの残りの個数
+    ui->allnumlabel->setText("全部で"+QString::number(num)+"こあるよ!");
 }
 
 void MainWindow::on_radioButton_clicked(bool checked)//timerstart/stop
@@ -383,7 +390,7 @@ void MainWindow::on_giveupbutton_released()//ギブアップボタン
     imageLabels.clear();
     timer->stop();
     auto current_page = ui->stackedWidget->currentIndex();//本当は結果表示画面に行かないといけない
-    ui->stackedWidget->setCurrentIndex(current_page - 2);
+    ui->stackedWidget->setCurrentIndex(current_page - 3);
 }
 
 void MainWindow::mousePressEvent(QMouseEvent *event)
@@ -528,4 +535,15 @@ void MainWindow::on_startReturnButton_2_released()
 void MainWindow::on_progressBar_valueChanged(int value)
 {
     ui->progressBar->setValue(value);
+}
+
+void MainWindow::on_spinBox_valueChanged(int arg1)
+{
+    num = arg1;
+}
+
+void MainWindow::on_ConfirmButton_released()
+{
+    auto current_page = ui->stackedWidget->currentIndex();
+    ui->stackedWidget->setCurrentIndex(++current_page);
 }

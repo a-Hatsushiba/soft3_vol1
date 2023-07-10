@@ -33,9 +33,7 @@ void pointMatching::run(void)
   cv::Mat image2 = cv::imread(g_img_path2);
 
   emit value_change(10);
-  sleep(1);
-  emit value_change(20);
-  sleep(1);
+  sleep(2);
   emit value_change(30);
   sleep(1);
   emit value_change(40);

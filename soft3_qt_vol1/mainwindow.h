@@ -66,6 +66,9 @@ private slots:
     void on_giveupbutton_released();
     void mousePressEvent(QMouseEvent *event);
     void on_clearbutton_released();
+    void on_spinBox_valueChanged(int arg1);
+    void on_ConfirmButton_released();
+
     /*** 浅川担当箇所 ***/
     void on_select_cheat_released();
     void on_select_jiriki_released();
@@ -75,7 +78,6 @@ private slots:
     void on_start_return_Button_released();
     void on_startReturnButton_2_released();
 
-
 private:
     Ui::MainWindow *ui;
 
@@ -84,8 +86,11 @@ private:
 
     /*** 自力モード用 ***/
     QTimer *timer;
-    int num = 10;//間違いの個数
-    unsigned long int time10 = 10000; //制限時間1000=10秒、間違いの個数、難易度によって変化？
+    int num;// = 10;//間違いの個数
+    unsigned long int time10; //制限時間1000=10秒、間違いの個数、難易度によって変化？
     QList<QLabel*> imageLabels;
+
+    /*** BGM用 ***/
+    QMediaPlayer* background_music;
 };
 #endif // MAINWINDOW_H
