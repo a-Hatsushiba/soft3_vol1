@@ -1,6 +1,6 @@
 #include "pointmatching.h"
 
-#define DEBUG 0
+#define DEBUG 1
 
 /*** ファイル画像のパスを入れるためのグローバル変数 ***/
 std::string g_img_path1, g_img_path2;
@@ -33,7 +33,18 @@ void pointMatching::run(void)
   cv::Mat image2 = cv::imread(g_img_path2);
 
   emit value_change(10);
-  sleep(2);
+  
+
+  /*** カメラの画像を長方形に補正する ***/
+  int num = g_point;
+  if(num == 2){
+    cropping(image1, image1);
+    cropping(image2, image2);
+    if(DEBUG) std::cout << "カメラ入力の補正終わったよ" << std::endl;
+  }else{
+      sleep(1);
+  }
+
   emit value_change(30);
   sleep(1);
   emit value_change(40);
@@ -44,13 +55,13 @@ void pointMatching::run(void)
   
   //特徴点マッチング
   int end_match = feature_matching(image1, image2, image1, image2);
+  if(DEBUG) std::cout << "特徴点マッチング終わったよ" << std::endl;
 
   emit value_change(90);
   sleep(1);
   
   if(end_match == 0){ //特徴点マッチングで類似度高い
       //差分検出＆補正をコマンドライン引数から選択->GUIのファイルorカメラでできるようにした
-      int num = g_point;
       if(DEBUG) std::cout << "g_point = " << num << std::endl;
 
       if(num == 1){
@@ -83,6 +94,51 @@ void pointMatching::run(void)
         if(DEBUG) std::cout << "エラー画面に移動" << std::endl;
         emit errorPage();
   }
+}
+
+void pointMatching::cropping(const cv::Mat &src, cv::Mat &dst){
+  const static int THRESH_VALUE = 200; // 二値化するときの閾値
+  cv::Mat gray, ret, ret2;
+
+  /* 輪郭抽出の下準備(二値化とオープニング/クロージング) */
+  cv::cvtColor(src, gray, cv::COLOR_BGR2GRAY);
+  cv::adaptiveThreshold(gray, ret, 255, cv::ADAPTIVE_THRESH_MEAN_C, cv::THRESH_BINARY_INV, 11, 5);
+  cv::dilate(ret, ret, cv::Mat(), cv::Point(-1,-1), 1);//ココらへんを変える
+  cv::erode(ret, ret, cv::Mat(), cv::Point(-1,-1), 1);//ココらへんを変える
+
+  /* 最も外側の輪郭を抽出 */
+  std::vector<std::vector<cv::Point>> contours; // 抽出時点の頂点
+  cv::findContours(ret, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
+  cv::cvtColor(ret, ret, cv::COLOR_GRAY2BGR);
+  src.convertTo(ret2, CV_32F, 1.0/255);
+  /* 輪郭を図形に近似 */
+  std::vector<cv::Point2f> approx; // 輪郭の頂点
+  for(auto contour = contours.begin(); contour != contours.end(); contour++){
+    double epsilon = 0.08 * cv::arcLength(*contour, true);
+    cv::approxPolyDP(cv::Mat(*contour), approx, epsilon, true);
+    double area = cv::contourArea(approx);
+    if(area < src.rows * src.cols / 2){
+      dst = src;
+      continue;
+    }
+    //cv::polylines(ret, approx, true, cv::Scalar(0, 0, 255), 2);
+    //cv::drawContours(ret, *contour, -1, cv::Scalar(0, 0, 255), cv::LINE_AA);
+  }
+  /* 四角形の頂点が検出できていない場合は終了 */
+  if(approx.size() != 4){
+    dst = src;
+    std::cout << "四角形の頂点の検出に失敗しました。検出できた頂点数は" << approx.size() << "個です。" << std::endl;
+    return;
+  }
+  /* 透視変換 */
+  std::vector<cv::Point2f> src_vertex = {approx[0], approx[1], approx[2], approx[3]};
+  int dst_width  = std::hypot(approx[3].x - approx[0].x, approx[3].y - approx[0].y);
+  int dst_height = std::hypot(approx[1].x - approx[0].x, approx[1].y - approx[0].y);
+  std::vector<cv::Point2f> dst_vertex = {{0,0}, {0,(float)dst_height}, {(float)dst_width,(float)dst_height}, {(float)dst_width,0}};
+  dst = cv::Mat::zeros(cv::Size(dst_width, dst_height), CV_32F);
+  cv::Mat H = cv::getPerspectiveTransform(src_vertex, dst_vertex);
+  std::cout << "check" << std::endl;
+  cv::warpPerspective(src, dst, H, dst.size());
 }
 
 int pointMatching::feature_matching(const cv::Mat &src1, const cv::Mat &src2, cv::Mat &dst1, cv::Mat &dst2)
@@ -328,7 +384,7 @@ void pointMatching::absdiff2(const cv::Mat &src, const cv::Mat &dst)
   cv::Mat overlaidImage;
   cv::addWeighted(redImage, 1.0, darkenedImage, 1.0, 0.0, overlaidImage);
   cv::resize(overlaidImage, overlaidImage, cv::Size(), 500.0/overlaidImage.cols ,500.0/overlaidImage.cols);
-  cv::imshow("Resuit", overlaidImage);
+  if(DEBUG) cv::imshow("Resuit", overlaidImage);
   //cv::waitKey(0);
   cv::imwrite("Result.png", overlaidImage);
 }

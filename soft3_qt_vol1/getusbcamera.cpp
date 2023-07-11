@@ -10,11 +10,13 @@ getUsbCamera::getUsbCamera(QObject *parent, bool b) : QThread(parent), Stop(b)
 getUsbCamera::~getUsbCamera()
 {
     Stop = true;
+
 }
 
 bool getUsbCamera::initCam(void) //カメラ読み込みできるか
 {
     bool ret = true;
+    Stop = false;
 
 //    putenv("OPENCV_VIDEOIO_MSMF_ENABLE_HW_TRANSFORMS=0");
     if(DEBUG) std::cout << "カメラオープン1" << std::endl;

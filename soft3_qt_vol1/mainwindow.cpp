@@ -63,6 +63,8 @@ MainWindow::MainWindow(QWidget *parent)
                                         ":pressed {background-color:gainsboro; color:black; border-style:inset;}");
     ui->ConfirmButton->setStyleSheet("*{padding:10px; border-radius:10px; background-color:whitesmoke; border:3px outset gainsboro;}"
                                          ":pressed {background-color:gainsboro; color:black; border-style:inset;}");
+    ui->returnPageButton->setStyleSheet("*{padding:10px; border-radius:10px; background-color:whitesmoke; border:3px outset gainsboro;}"
+                                         ":pressed {background-color:gainsboro; color:black; border-style:inset;}");
 
     /*** 浅川担当箇所ボタン ***/
     ui->select_cheat->setStyleSheet("*{padding:10px; border-radius:10px; background-color:whitesmoke; border:3px outset gainsboro;}"
@@ -92,6 +94,9 @@ MainWindow::MainWindow(QWidget *parent)
     QMediaPlayer* background_music = new QMediaPlayer();
     background_music->setPlaylist(playlist);
     background_music->play();
+
+    /***カメラ***/
+    getUsbCamT = new getUsbCamera(this);
 
     /*** 進捗状況のバー ***/
     ui->progressBar->setStyleSheet("background-color:white; border:2px solid grey; border-radius:5px; text-align:center;");
@@ -266,7 +271,7 @@ void MainWindow::on_cameraButton_1_released()
         std::cout << "NextPage" << std::endl;
     }
     /**USBカメラ**/
-    getUsbCamT = new getUsbCamera(this);
+//    getUsbCamT = new getUsbCamera(this);
     if(getUsbCamT->initCam()){
         if(DEBUG) std::cout << "connect start!!!" << std::endl;
         connect(getUsbCamT, SIGNAL(valueChangedCam(void)), this, SLOT(onValueChangedCam(void)));
@@ -328,6 +333,7 @@ void MainWindow::on_cameraTakeButton_1_released()
             g_count = 0;
             ui->debuglabel_3->setText("");
             getUsbCamT->Stop = true;
+            //delete getUsbCamT;
             auto current_page = ui->stackedWidget->currentIndex();
             ui->stackedWidget->setCurrentIndex(current_page+2);
             /*** 別スレッドで画像処理スタート ***/
@@ -546,4 +552,10 @@ void MainWindow::on_ConfirmButton_released()
 {
     auto current_page = ui->stackedWidget->currentIndex();
     ui->stackedWidget->setCurrentIndex(++current_page);
+}
+
+void MainWindow::on_returnPageButton_released()
+{
+    auto current_page = ui->stackedWidget->currentIndex();
+    ui->stackedWidget->setCurrentIndex(current_page - 4);
 }

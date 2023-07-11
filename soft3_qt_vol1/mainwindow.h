@@ -78,6 +78,8 @@ private slots:
     void on_start_return_Button_released();
     void on_startReturnButton_2_released();
 
+    void on_returnPageButton_released();
+
 private:
     Ui::MainWindow *ui;
 
